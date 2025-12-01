@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini App Debug</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 8px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        code { background: #f4f4f4; padding: 2px 6px; }
+    </style>
+</head>
+<body>
+    <h1>Mini App Debug Page</h1>
+    <div id="results"></div>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(message, isSuccess) {
+            const div = document.createElement('div');
+            div.className = 'status ' + (isSuccess ? 'success' : 'error');
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+        
+        // Test 1: Check if React loaded
+        try {
+            if (window.React) {
+                addResult('✓ React loaded', true);
+            } else {
+                addResult('✗ React NOT loaded', false);
+            }
+        } catch (e) {
+            addResult('✗ React check failed: ' + e.message, false);
+        }
+        
+        // Test 2: Check API connection
+        fetch('http://localhost:8001/api/catalog/products/')
+            .then(res => res.json())
+            .then(data => {
+                addResult(`✓ API working - Found ${data.length} products`, true);
+            })
+            .catch(err => {
+                addResult('✗ API failed: ' + err.message + ' (Check CORS)', false);
+            });
+            
+        // Test 3: Check Telegram SDK
+        if (window.Telegram && window.Telegram.WebApp) {
+            addResult('✓ Telegram SDK loaded', true);
+        } else {
+            addResult('⚠ Telegram SDK not loaded (normal for browser testing)', true);
+        }
+        
+        // Test 4: List all errors
+        window.addEventListener('error', function(e) {
+            addResult('✗ JavaScript Error: ' + e.message + ' at ' + e.filename + ':' + e.lineno, false);
+        });
+    </script>
+</body>
+</html>
