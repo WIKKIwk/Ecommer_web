@@ -5,20 +5,15 @@ import { useCartStore } from '../stores/cart';
 import { haptic, mainButton, backButton } from '../telegram/sdk';
 import { useLanguage } from '../context/language-context';
 
+import { CHECKOUT_CONFIG } from '../config';
+
 export default function CheckoutPage() {
     const navigate = useNavigate();
     const { items, total, clearCart } = useCartStore();
     const { t } = useLanguage();
     const [deliveryTime, setDeliveryTime] = useState('asap'); // 'asap' or 'scheduled'
-    const [address, setAddress] = useState({
-        street: 'Toshkentskiy rayon, ulitsa Damarуk, 26',
-        house: '26',
-        apartment: 'hdd',
-        floor: 'sb',
-        entrance: 'nd',
-        comment: ''
-    });
-    const [phone] = useState('+998888170131');
+    const [address, setAddress] = useState(CHECKOUT_CONFIG.DEFAULT_ADDRESS);
+    const [phone] = useState(CHECKOUT_CONFIG.DEFAULT_PHONE);
     const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash', 'card', 'online'
     const [promoCode, setPromoCode] = useState('');
     const [promoInput, setPromoInput] = useState('');
@@ -41,7 +36,7 @@ export default function CheckoutPage() {
             return;
         }
 
-        const deliveryFee = 56300;
+        const deliveryFee = CHECKOUT_CONFIG.DEFAULT_DELIVERY_FEE;
         const totalAmount = Math.floor(parseFloat(total)) + deliveryFee;
 
         mainButton.show(`${totalAmount.toLocaleString()} UZS - ${t('checkout.submit')}`, async () => {
@@ -76,7 +71,7 @@ export default function CheckoutPage() {
         }
     };
 
-    const deliveryFee = 56300;
+    const deliveryFee = CHECKOUT_CONFIG.DEFAULT_DELIVERY_FEE;
     const itemsTotal = Math.floor(parseFloat(total));
     const totalAmount = itemsTotal + deliveryFee;
 
@@ -93,17 +88,15 @@ export default function CheckoutPage() {
                             haptic.selection();
                             setDeliveryTime('asap');
                         }}
-                        className={`w-full p-4 rounded-lg mb-3 border transition-colors ${
-                            deliveryTime === 'asap'
+                        className={`w-full p-4 rounded-lg mb-3 border transition-colors ${deliveryTime === 'asap'
                                 ? 'bg-gray-100 border-gray-300'
                                 : 'bg-gray-50 border-gray-200'
-                        }`}
+                            }`}
                     >
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                    deliveryTime === 'asap' ? 'border-gray-900' : 'border-gray-300'
-                                }`}>
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${deliveryTime === 'asap' ? 'border-gray-900' : 'border-gray-300'
+                                    }`}>
                                     {deliveryTime === 'asap' && (
                                         <div className="w-3 h-3 rounded-full bg-black" />
                                     )}
@@ -143,7 +136,7 @@ export default function CheckoutPage() {
                             <input
                                 type="text"
                                 value={address.house}
-                                onChange={(e) => setAddress({...address, house: e.target.value})}
+                                onChange={(e) => setAddress({ ...address, house: e.target.value })}
                                 className="w-full bg-transparent text-base font-semibold text-gray-900 outline-none"
                             />
                         </div>
@@ -152,7 +145,7 @@ export default function CheckoutPage() {
                             <input
                                 type="text"
                                 value={address.apartment}
-                                onChange={(e) => setAddress({...address, apartment: e.target.value})}
+                                onChange={(e) => setAddress({ ...address, apartment: e.target.value })}
                                 className="w-full bg-transparent text-base font-semibold text-gray-900 outline-none"
                             />
                         </div>
@@ -161,7 +154,7 @@ export default function CheckoutPage() {
                             <input
                                 type="text"
                                 value={address.floor}
-                                onChange={(e) => setAddress({...address, floor: e.target.value})}
+                                onChange={(e) => setAddress({ ...address, floor: e.target.value })}
                                 className="w-full bg-transparent text-base font-semibold text-gray-900 outline-none"
                             />
                         </div>
@@ -170,7 +163,7 @@ export default function CheckoutPage() {
                             <input
                                 type="text"
                                 value={address.entrance}
-                                onChange={(e) => setAddress({...address, entrance: e.target.value})}
+                                onChange={(e) => setAddress({ ...address, entrance: e.target.value })}
                                 className="w-full bg-transparent text-base font-semibold text-gray-900 outline-none"
                             />
                         </div>
@@ -180,7 +173,7 @@ export default function CheckoutPage() {
                     <div className="bg-gray-50 rounded-lg p-3 mb-4">
                         <textarea
                             value={address.comment}
-                            onChange={(e) => setAddress({...address, comment: e.target.value})}
+                            onChange={(e) => setAddress({ ...address, comment: e.target.value })}
                             placeholder={t('checkout.courierComment')}
                             className="w-full bg-transparent text-sm text-gray-900 outline-none resize-none"
                             rows={2}
@@ -291,12 +284,10 @@ export default function CheckoutPage() {
                                 <div className="font-medium text-gray-600">Faollashtirildi</div>
                             )}
                         </div>
-                        <div className={`w-12 h-6 rounded-full transition-colors ${
-                            useBonuses ? 'bg-gray-600' : 'bg-gray-300'
-                        }`}>
-                            <div className={`w-5 h-5 bg-white rounded-full shadow-sm transition-transform transform mt-0.5 ${
-                                useBonuses ? 'translate-x-6' : 'translate-x-0.5'
-                            }`} />
+                        <div className={`w-12 h-6 rounded-full transition-colors ${useBonuses ? 'bg-gray-600' : 'bg-gray-300'
+                            }`}>
+                            <div className={`w-5 h-5 bg-white rounded-full shadow-sm transition-transform transform mt-0.5 ${useBonuses ? 'translate-x-6' : 'translate-x-0.5'
+                                }`} />
                         </div>
                     </button>
                 </div>
@@ -390,17 +381,15 @@ export default function CheckoutPage() {
                                     setPaymentMethod('cash');
                                     setShowPaymentModal(false);
                                 }}
-                                className={`w-full p-4 rounded-lg border-2 transition-colors ${
-                                    paymentMethod === 'cash'
+                                className={`w-full p-4 rounded-lg border-2 transition-colors ${paymentMethod === 'cash'
                                         ? 'bg-gray-100 border-gray-900'
                                         : 'bg-white border-gray-200'
-                                }`}
+                                    }`}
                             >
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                            paymentMethod === 'cash' ? 'border-gray-900' : 'border-gray-300'
-                                        }`}>
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'cash' ? 'border-gray-900' : 'border-gray-300'
+                                            }`}>
                                             {paymentMethod === 'cash' && (
                                                 <div className="w-3 h-3 rounded-full bg-black" />
                                             )}
@@ -416,17 +405,15 @@ export default function CheckoutPage() {
                                     setPaymentMethod('card');
                                     setShowPaymentModal(false);
                                 }}
-                                className={`w-full p-4 rounded-lg border-2 transition-colors ${
-                                    paymentMethod === 'card'
+                                className={`w-full p-4 rounded-lg border-2 transition-colors ${paymentMethod === 'card'
                                         ? 'bg-gray-100 border-gray-900'
                                         : 'bg-white border-gray-200'
-                                }`}
+                                    }`}
                             >
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                            paymentMethod === 'card' ? 'border-gray-900' : 'border-gray-300'
-                                        }`}>
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'card' ? 'border-gray-900' : 'border-gray-300'
+                                            }`}>
                                             {paymentMethod === 'card' && (
                                                 <div className="w-3 h-3 rounded-full bg-black" />
                                             )}
@@ -442,17 +429,15 @@ export default function CheckoutPage() {
                                     setPaymentMethod('online');
                                     setShowPaymentModal(false);
                                 }}
-                                className={`w-full p-4 rounded-lg border-2 transition-colors ${
-                                    paymentMethod === 'online'
+                                className={`w-full p-4 rounded-lg border-2 transition-colors ${paymentMethod === 'online'
                                         ? 'bg-gray-100 border-gray-900'
                                         : 'bg-white border-gray-200'
-                                }`}
+                                    }`}
                             >
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                            paymentMethod === 'online' ? 'border-gray-900' : 'border-gray-300'
-                                        }`}>
+                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${paymentMethod === 'online' ? 'border-gray-900' : 'border-gray-300'
+                                            }`}>
                                             {paymentMethod === 'online' && (
                                                 <div className="w-3 h-3 rounded-full bg-black" />
                                             )}

@@ -67,9 +67,9 @@ services:
       dockerfile: Dockerfile.prod
     container_name: kamolon-frontend
     environment:
-      - NEXT_PUBLIC_API_BASE_URL=http://84.247.179.221:8001/api
+      - NEXT_PUBLIC_API_BASE_URL=http://${DOMAIN_OR_IP}:8001/api
       - INTERNAL_API_BASE_URL=http://backend:8001/api
-      - NEXT_PUBLIC_MEDIA_BASE_URL=http://84.247.179.221:8001
+      - NEXT_PUBLIC_MEDIA_BASE_URL=http://${DOMAIN_OR_IP}:8001
     ports:
       - "3000:3000"
     depends_on:
@@ -82,7 +82,7 @@ services:
       dockerfile: Dockerfile.prod
     container_name: kamolon-miniapp
     environment:
-      - VITE_API_BASE_URL=http://84.247.179.221:8001/api
+      - VITE_API_BASE_URL=http://${DOMAIN_OR_IP}:8001/api
     ports:
       - "3001:3001"
     depends_on:

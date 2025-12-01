@@ -131,8 +131,29 @@ superuser:
 	@echo "👤 Creating superuser..."
 	@docker compose exec backend python manage.py createsuperuser
 
+# Check and configure domain
+check-domain:
+	@if [ ! -f .env ]; then \
+		echo "⚙️  Creating .env from .env.example..."; \
+		cp .env.example .env; \
+	fi
+	@if grep -q "DOMAIN_OR_IP=your-domain.com" .env || grep -q "DOMAIN_OR_IP=" .env; then \
+		echo ""; \
+		echo "⚠️  Domain not configured!"; \
+		echo "👉 Please enter your domain name or server IP (e.g., my-shop.com or 123.45.67.89):"; \
+		read -p "   > " domain_val; \
+		if [ ! -z "$$domain_val" ]; then \
+			sed -i "s/DOMAIN_OR_IP=your-domain.com/DOMAIN_OR_IP=$$domain_val/" .env; \
+			sed -i "s/DOMAIN_OR_IP=/DOMAIN_OR_IP=$$domain_val/" .env; \
+			echo "✅ Domain configured to: $$domain_val"; \
+		else \
+			echo "❌ Domain cannot be empty!"; \
+			exit 1; \
+		fi \
+	fi
+
 # Production deployment
-prod-up:
+prod-up: check-domain
 	@echo "🌐 Starting production services..."
 	@docker compose -f docker-compose.production.yml down --remove-orphans
 	@docker compose -f docker-compose.production.yml up -d --build
