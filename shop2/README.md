@@ -25,3 +25,19 @@ Modern e-commerce platform built with Django and Next.js.
 - React 18
 - TypeScript
 - Tailwind CSS
+
+## Setup
+
+1. Clone the repository
+2. Create `.env` file from `.env.example`
+3. Run with Docker Compose:
+
+```bash
+docker-compose up
+```
+
+Access:
+
+- Frontend: <http://localhost:3000>
+- Backend API: <http://localhost:8000>
+- Admin Panel: <http://localhost:8000/admin>
