@@ -47,3 +47,16 @@ TEMPLATES = [
         },
     },
 ]
+
+WSGI_APPLICATION = 'config.wsgi.application'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'shop2'),
+        'USER': os.getenv('DB_USER', 'shop2_user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'shop2_password'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
+    }
+}
