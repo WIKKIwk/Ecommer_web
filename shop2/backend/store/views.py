@@ -29,3 +29,13 @@ class CartViewSet(viewsets.ModelViewSet):
         return Cart.objects.none()
 
 
+class OrderViewSet(viewsets.ModelViewSet):
+    serializer_class = OrderSerializer
+    permission_classes = [AllowAny]
+    
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return Order.objects.filter(user=self.request.user)
+        return Order.objects.none()
+
+
