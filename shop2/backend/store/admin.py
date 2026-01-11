@@ -14,3 +14,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'price', 'stock', 'available']
     list_filter = ['category', 'available']
     prepopulated_fields = {'slug': ('name',)}
+
+
+admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'session_key', 'created_at']
