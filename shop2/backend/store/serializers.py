@@ -33,4 +33,13 @@ class CartSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'items', 'created_at']
 
 
+class OrderItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+    
+    class Meta:
+        model = OrderItem
+        fields = ['id', 'product', 'price', 'quantity']
+
+
+
 
