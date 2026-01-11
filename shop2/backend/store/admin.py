@@ -16,6 +16,12 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
-admin.register(Cart)
+@admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'session_key', 'created_at']
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'total_price', 'status', 'created_at']
+    list_filter = ['status']
