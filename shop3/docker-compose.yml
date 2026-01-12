@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: shop3
+      POSTGRES_USER: shop3_user
+      POSTGRES_PASSWORD: shop3_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      DB_NAME: shop3
+      DB_USER: shop3_user
+      DB_PASSWORD: shop3_password
+      DB_HOST: db
+      DB_PORT: 5432
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "3003:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
